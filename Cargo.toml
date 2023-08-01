@@ -1,0 +1,37 @@
+[package]
+name = "tantivy-object-store"
+version = "0.1.0"
+edition = "2021"
+authors = ["Lance Devs <dev@eto.ai>"]
+description = "A tantivy Directory implementation against object stores (S3, GCS, etc.)"
+license = "Apache-2.0"
+repository = "https://github.com/lancedb/tantivy-object-store"
+readme = "README.md"
+rust-version = "1.65"
+keywords = [
+    "full-text-search",
+    "search",
+    "search-engine",
+]
+categories = [
+    "data-structures",
+    "text-processing",
+    "filesystem",
+]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+# 0.19 is when file handle started to return Arc instead of Box
+# https://github.com/quickwit-oss/tantivy/commit/775e936f7d8e461b7267bb13763db37c1c45afb8
+tantivy = ">=0.19"
+object_store = ">=0.6.1"
+async-trait = "0"
+tokio = { version = "1", features = ["full"] }
+uuid = "1"
+bytes = "1"
+log = "0"
+tempfile = "3"
+
+[dev-dependencies]
+env_logger = "0"
