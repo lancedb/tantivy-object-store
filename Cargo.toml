@@ -35,3 +35,8 @@ tempfile = "3"
 
 [dev-dependencies]
 env_logger = "0"
+wikidump = "0.2.2"
+stop-words = "0"
+
+[[example]]
+name = "index_wiki_local"
