@@ -449,7 +449,7 @@ pub fn new_object_store_directory(
     read_version: Option<u64>,
     write_version: u64,
     cache_loc: Option<&str>,
-    rt: Option<tokio::runtime::Runtime>,
+    rt: Option<Arc<tokio::runtime::Runtime>>,
 ) -> Result<Box<dyn Directory>, std::io::Error> {
     if let Some(read_version) = read_version {
         if read_version > write_version {
@@ -471,13 +471,12 @@ pub fn new_object_store_directory(
         write_version,
         local_fs: Arc::new(LocalFileSystem::new()),
         cache_loc,
-        rt: Arc::new(
-            rt.unwrap_or(
-                tokio::runtime::Builder::new_multi_thread()
-                    .enable_all()
-                    .build()?,
-            ),
-        ),
+        rt: rt.unwrap_or(Arc::new(
+            tokio::runtime::Builder::new_multi_thread()
+                .enable_all()
+                .build()?,
+        )),
+
         atomic_rw_lock: Arc::new(Mutex::new(())),
     }))
 }
