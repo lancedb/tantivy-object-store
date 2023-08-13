@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! Object store (S3, AWS, etc.) support for tantivy.
+//! Object store (S3, GCS, etc.) support for tantivy.
 
 use async_trait::async_trait;
 use log::debug;
