@@ -37,10 +37,9 @@ use tantivy::{
     HasLen,
 };
 
-use tokio::{
-    io::{AsyncReadExt, AsyncWriteExt},
-    sync::Mutex,
-};
+use tokio::io::{AsyncReadExt, AsyncWriteExt};
+
+use std::sync::Mutex;
 
 #[derive(Debug, Clone)]
 struct ObjectStoreDirectory {
@@ -314,6 +313,8 @@ impl Directory for ObjectStoreDirectory {
         );
         let path = Path::new(&path_str);
 
+        // lock so no one can write a dirty version
+        let _lock = self.atomic_rw_lock.lock().unwrap();
         let f = self.get_file_handle(path)?;
         Ok(f.read_bytes(0..f.len())
             .map_err(|e| OpenReadError::wrap_io_error(e, path.to_path_buf()))?
@@ -348,9 +349,9 @@ impl Directory for ObjectStoreDirectory {
 
         debug!("true location: {:?}", location);
 
+        // Lock so no one can read a dirty version
+        let _lock = self.atomic_rw_lock.lock().unwrap();
         self.rt.handle().block_on(async {
-            // Lock so no one can write at the same time
-            let _ = self.atomic_rw_lock.lock().await;
             self.store
                 .put(&location, bytes::Bytes::from(data.to_vec()))
                 .await
