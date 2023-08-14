@@ -1,0 +1,28 @@
+name: Publish Rust crate
+
+on:
+  release:
+    types: [published]
+
+env:
+  # This env var is used by Swatinem/rust-cache@v2 for the cache
+  # key, so we set it to make sure it is always consistent.
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - uses: actions/checkout@v3
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: .
+      - uses: katyo/publish-crates@v2
+        with:
+          registry-token: ${{ secrets.TANTIVY_OBJECT_STORE_RELEASE_TOKEN }}
+          args: '--all-features'
+          path: .

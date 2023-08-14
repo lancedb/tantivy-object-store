@@ -1,7 +1,7 @@
 # Tantivy Object Store
 This repo contains an implementation of a `tantivy::directory::Directory` using an `object_store::ObjectStore`.
 
-This implementation supports both read and write, but does not implement locking or file watch. The index building process is responsible for making sure that no two concurrent builder runs at the same time
+This implementation supports both read and write, but does not support locking or file watch. The index building process is responsible for making sure that there are no concurrent index writers.
 
 A few notable behavior differences from tantivy's directory implementations:
 
