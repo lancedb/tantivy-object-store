@@ -575,7 +575,7 @@ mod test {
             .search(&query, &tantivy::collector::TopDocs::with_limit(10))
             .unwrap();
         assert_eq!(top_docs.len(), 1);
-        let doc = top_docs.get(0).unwrap().1;
+        let doc = top_docs.first().unwrap().1;
         let retrieved_doc = searcher.doc(doc).unwrap();
         // we only store the text field, so there won't be an id field
         assert_eq!(
@@ -601,7 +601,7 @@ mod test {
             .unwrap();
 
         assert_eq!(top_docs.len(), 1);
-        let doc = top_docs.get(0).unwrap().1;
+        let doc = top_docs.first().unwrap().1;
         let retrieved_doc = searcher.doc(doc).unwrap();
         // we only store the text field, so there won't be an id field
         assert_eq!(

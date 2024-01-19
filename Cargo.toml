@@ -25,7 +25,7 @@ categories = [
 # 0.20 is when file handle started to return Arc instead of Box + when the method is ungated from feature flag
 # https://github.com/quickwit-oss/tantivy/commit/775e936f7d8e461b7267bb13763db37c1c45afb8
 tantivy = "0.20"
-object_store = "0.8.0"
+object_store = "0.9.0"
 async-trait = "0"
 tokio = { version = "1", features = ["full"] }
 uuid = "1"
