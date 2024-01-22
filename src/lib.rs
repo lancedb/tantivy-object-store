@@ -60,7 +60,7 @@ struct ObjectStoreDirectory {
 struct ObjectStoreFileHandle {
     store: Arc<dyn ObjectStore>,
     path: object_store::path::Path,
-    // We need to store this becasue the HasLen trait doesn't return a Result
+    // We need to store this because the HasLen trait doesn't return a Result
     // We need to do the IO at construction time
     len: usize,
 
@@ -286,7 +286,7 @@ impl Directory for ObjectStoreDirectory {
         }
 
         // Inject versioning into path -- we want to enforce CoW here
-        // if the write verison exist, read version has no effect
+        // if the write version exist, read version has no effect
         // if the write version doesn't exist we read from the old version
 
         let buf = path.to_string_lossy();
@@ -393,12 +393,12 @@ impl Directory for ObjectStoreDirectory {
 
     fn watch(&self, _: WatchCallback) -> tantivy::Result<WatchHandle> {
         // We have reload mechanism from else where in the system
-        // A sinlge index load will always be immutable
+        // A single index load will always be immutable
         Ok(WatchHandle::empty())
     }
 
     fn acquire_lock(&self, _: &directory::Lock) -> Result<DirectoryLock, LockError> {
-        // We will manually garueentee index RW safety
+        // We will manually guarantee index RW safety
         Ok(DirectoryLock::from(NoOpLock::new()))
     }
 }
@@ -472,12 +472,11 @@ pub fn new_object_store_directory(
         write_version,
         local_fs: Arc::new(LocalFileSystem::new()),
         cache_loc,
-        rt: rt.unwrap_or(Arc::new(
+        rt: rt.unwrap_or_else(|| Arc::new(
             tokio::runtime::Builder::new_multi_thread()
                 .enable_all()
                 .build()?,
         )),
-
         atomic_rw_lock: Arc::new(Mutex::new(())),
     }))
 }
@@ -611,7 +610,7 @@ mod test {
             )
         );
 
-        // open a differnet version and search
+        // open a different version and search
         let dir =
             new_object_store_directory(store.clone(), &base_path, None, 1, None, None).unwrap();
         info!("Open Index");
